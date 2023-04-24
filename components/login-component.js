@@ -1,7 +1,7 @@
 import {
   loginUser,
   regUser
-} from "../api.js";
+} from "/api.js";
 export function renderLogin({  appEl,  setToken, setUser,  codeAdjust }) {
   let isLoginMode = true;
 
