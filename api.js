@@ -1,8 +1,3 @@
-// "функция fetch вызывается только в этом модуле;" по ДЗ
-// import renderComments from "./renderComments.js";
-// const buttonElement = document.getElementById("add-button");
-// const nameInputElement = document.getElementById("name-input");
-// const textInputElement = document.getElementById("text-input");
 
 const host = "https://webdev-hw-api.vercel.app/api/v2/anton-sobachkin/comments";
 export function getComms({

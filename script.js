@@ -1,8 +1,4 @@
-// fetchTodosAndRender = codeAdjust
-// renderApp = renderComments
-// getTodos = getComms
-// addTodo = sendComm`
-// renderLoginComponent = renderLogin
+
 import {
   getComms
 } from "./api.js";
@@ -109,8 +105,7 @@ const renderComments = () => {
   const textInputElement = document.getElementById("text-input");
   const nameInputElement = document.getElementById('name-input');
   nameInputElement.value = user.name;
-  // const listElement = document.getElementById("list");
-  // const deleteButton = document.getElementById("del-button");
+
 
   //Добавление комментария
 
@@ -139,6 +134,4 @@ const renderComments = () => {
   addNewElement();
 
 };
-// renderComments();
-// getComms();
 codeAdjust();
