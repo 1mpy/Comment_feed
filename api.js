@@ -73,3 +73,14 @@ export function regUser({
     return response.json();
   });
 }
+
+export function addLike({ token, id }) {
+  return fetch(`${host}/${id}/toggle-like`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    return response.json();
+  });
+}

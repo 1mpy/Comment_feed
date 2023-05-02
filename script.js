@@ -1,4 +1,3 @@
-
 import {
   getComms
 } from "./api.js";
@@ -6,12 +5,18 @@ import {
   sendComm
 } from "./api.js";
 import {
+  addLike
+} from "./api.js";
+import {
   renderLogin
 } from "./components/login-component.js";
-import { format } from "date-fns";
+import {
+  format
+} from "date-fns";
 let comments = [];
 let user = null;
 let token = null;
+
 const codeAdjust = (token) => {
   return getComms({
     token
@@ -33,19 +38,6 @@ const codeAdjust = (token) => {
 codeAdjust();
 const renderComments = () => {
   const appEl = document.getElementById('app');
-  //  if (!token) { 
-  //   renderLogin({
-  //     appEl,
-  //     setToken: (newToken) => {
-  //       token = newToken;
-  //     },
-  //     setUser: (newUser) => {
-  //       user = newUser;
-  //     },
-  //     codeAdjust,
-  //   });
-  //   return;
-  // }
   const commentsHtml = comments.map((comment, index) => {
     const createDate = format(new Date(comment.date), 'yyyy-mm-dd hh.mm.ss');
     return `<li class="comment">
@@ -61,7 +53,7 @@ const renderComments = () => {
     <div class="comment-footer">
       <div class="likes">
         <span class="likes-counter">${comment.likes}</span>      
-        <button class="like-button ${comment.isLiked}" data-like="${index}"></button>
+        <button class="like-button ${comment.isLiked ? "-active-like" : ""}" data-id='${comment.id}' data-index="${index}"></button>
       </div>
     </div>
   </li>`;
@@ -95,8 +87,8 @@ const renderComments = () => {
           token = newToken;
         },
         setUser: (newUser) => {
-                user = newUser;
-              },
+          user = newUser;
+        },
         codeAdjust
       });
     });
@@ -118,13 +110,13 @@ const renderComments = () => {
     buttonElement.disabled = true;
     buttonElement.textContent = "Элемент добавлятся...";
     sendComm({
-      "text": textInputElement.value,
-      // text,
-      token
-    })
-    .then(() => {
-      return codeAdjust();
-    });
+        "text": textInputElement.value,
+        // text,
+        token
+      })
+      .then(() => {
+        return codeAdjust();
+      });
   });
 
   // Обновление по кнопке
@@ -135,5 +127,28 @@ const renderComments = () => {
   }
   addNewElement();
 
+  // // Лайки и их счетчик
+
+  const likeComment = (comments) => {
+    const likesButton = document.querySelectorAll(".like-button");
+
+    for (const item of likesButton) {
+      item.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const id = item.dataset.id;
+        const index = item.dataset.index;
+
+        addLike({
+          token,
+          id,
+        }).then((responseData) => {
+          comments[index].likes = responseData.result.likes;
+          comments[index].isLiked = responseData.result.isLiked;          
+          renderComments();
+        });
+      });
+    }
+  };
+  likeComment(comments);
 };
 codeAdjust();
