@@ -74,7 +74,7 @@ export function regUser({
   });
 }
 
-export function addLike({ token, id }) {
+export function addLike({ token, id }) {  //под каким токеном и айди был поставлен лайк
   return fetch(`${host}/${id}/toggle-like`, {
     method: "POST",
     headers: {
@@ -84,3 +84,14 @@ export function addLike({ token, id }) {
     return response.json();
   });
 }
+
+// export function delComm ({token, id}) {
+//   return fetch (`${host}` + id, {
+//     method: "DELETE",
+//     headers: {
+//       Authorization: token,
+//     },
+//   }).then((response) => {
+//     return response.json();
+//   });
+// }

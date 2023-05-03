@@ -1,3 +1,4 @@
+import { id } from "date-fns/locale";
 import {
   getComms
 } from "./api.js";
@@ -6,6 +7,9 @@ import {
 } from "./api.js";
 import {
   addLike
+} from "./api.js";
+import {
+  delComm
 } from "./api.js";
 import {
   renderLogin
@@ -42,12 +46,12 @@ const renderComments = () => {
     const createDate = format(new Date(comment.date), 'yyyy-mm-dd hh.mm.ss');
     return `<li class="comment">
     <div class="comment-header">
-      <div class="comment-name">${comment.name} </div>
+      <div class="comment-name">${protectHtml(comment.name)} </div>
       <div>${createDate}</div>
     </div>
     <div class="comment-body">
-      <div class="comment-text" >
-        ${comment.text}
+      <div class="comment-text" data-reply="${index}">
+        ${protectHtml(comment.text)}
       </div>
     </div>
     <div class="comment-footer">
@@ -72,7 +76,9 @@ const renderComments = () => {
       <div class="add-form-row">
         <button class="add-form-button turn-off" id="add-button">Написать</button>
       </div>
-
+      <div class="add-form-row">
+      <button class="delete-button" >Удалить последний комментарий</button>
+    </div>
     </div>
   </div>`: `<p>Чтобы добавить комментарий, <a class="check" id="auth">авторизуйтесь</a></p>`}`;
 
@@ -128,7 +134,6 @@ const renderComments = () => {
   addNewElement();
 
   // // Лайки и их счетчик
-
   const likeComment = (comments) => {
     const likesButton = document.querySelectorAll(".like-button");
 
@@ -143,12 +148,46 @@ const renderComments = () => {
           id,
         }).then((responseData) => {
           comments[index].likes = responseData.result.likes;
-          comments[index].isLiked = responseData.result.isLiked;          
+          comments[index].isLiked = responseData.result.isLiked;
           renderComments();
         });
       });
     }
   };
   likeComment(comments);
+
+  // //замена символов
+  function protectHtml(anything = "") {
+    return anything.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  }
+  protectHtml();
+
+  // Ответ на комментарий
+  const makeResponse = () => {
+  const allComments = document.querySelectorAll(".comment-text");
+  for (const oneComment of allComments) {
+    oneComment.addEventListener('click', () => {
+      const index = oneComment.dataset.reply;
+      textInputElement.value = "> " + comments[index].text + "\n" + comments[index].name + ",";
+    });
+  }
 };
+makeResponse();
+
+//кнопка удаления
+// пока не понимаю как удалить
+
+// document.getElementById("delete-button").addEventListener("click", (event) => {
+//   event.stopPropagation();
+//   delComm({id: comment.id, token: token}).then(() => {
+//     codeAdjust(id, token);
+//   });
+// });
+
+};
+
 codeAdjust();
+
+
+
+
