@@ -73,3 +73,25 @@ export function regUser({
     return response.json();
   });
 }
+
+export function addLike({ token, id }) {  //под каким токеном и айди был поставлен лайк
+  return fetch(`${host}/${id}/toggle-like`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    return response.json();
+  });
+}
+
+// export function delComm ({token, id}) {
+//   return fetch (`${host}` + id, {
+//     method: "DELETE",
+//     headers: {
+//       Authorization: token,
+//     },
+//   }).then((response) => {
+//     return response.json();
+//   });
+// }
